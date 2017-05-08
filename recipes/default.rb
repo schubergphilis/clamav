@@ -1,9 +1,10 @@
-# Encoding: UTF-8
+# encoding: utf-8
+# frozen_string_literal: true
 #
 # Cookbook Name:: clamav
 # Recipe:: default
 #
-# Copyright 2012-2014, Jonathan Hartman
+# Copyright 2012-2016, Jonathan Hartman
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,19 +19,17 @@
 # limitations under the License.
 #
 
-case node['platform_family']
-when 'rhel'
-  include_recipe "#{cookbook_name}::install_rpm"
-when 'debian'
-  include_recipe "#{cookbook_name}::install_deb"
-else
-  fail(Chef::Exceptions::UnsupportedAction,
-       "Cookbook does not support #{node['platform']} platform")
-end
+attrs = node['clamav']
 
-include_recipe "#{cookbook_name}::users"
-include_recipe "#{cookbook_name}::logging"
-include_recipe "#{cookbook_name}::freshclam"
-include_recipe "#{cookbook_name}::clamd"
-include_recipe "#{cookbook_name}::services"
-include_recipe "#{cookbook_name}::clamav_scan"
+clamav 'default' do
+  version attrs['version'] unless attrs['version'].nil?
+  dev attrs['dev'] unless attrs['dev'].nil?
+  clamd_config attrs['clamd']['config'] unless attrs['clamd']['config'].nil?
+  unless attrs['freshclam']['config'].nil?
+    freshclam_config attrs['freshclam']['config']
+  end
+  enable_clamd attrs['clamd']['enabled'] unless attrs['clamd']['enabled'].nil?
+  unless attrs['freshclam']['enabled'].nil?
+    enable_freshclam attrs['freshclam']['enabled']
+  end
+end

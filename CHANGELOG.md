@@ -1,6 +1,23 @@
 ClamAV Cookbook CHANGELOG
 =========================
 
+Unreleased
+----------
+- Complete rewrite from the ground up using Chef custom resources
+- Remove the dependency on the apt cookbook
+
+v1.3.0 (2016-02-05)
+-------------------
+* Remove the additional Ubuntu repo; it was shut down 2016/01/30
+* Run Freshclam any time the virus DB does not exist
+* Add an attribute that can be overridden to skip the initial Freshclam run
+
+v1.2.0 (2015-05-07)
+-------------------
+* Add support for RHEL7
+* Add an attribute to control disabling/enabling of the Freshclam cron job
+  RHEL installs and disables by default
+
 v1.1.0 (2015-01-27)
 -------------------
 * In Amazon, use their packages instead of EPEL's
