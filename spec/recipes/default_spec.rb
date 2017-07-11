@@ -1,77 +1,98 @@
-# Encoding: UTF-8
+# encoding: utf-8
+# frozen_string_literal: true
 
-require 'spec_helper'
+require_relative '../spec_helper'
 
 describe 'clamav::default' do
-  let(:includes) do
-    %w(
-      clamav::users
-      clamav::logging
-      clamav::freshclam
-      clamav::clamd
-      clamav::services
-      clamav::clamav_scan
-    )
-  end
-  let(:extra_includes) { [] }
-  let(:platform) { { platform: nil, version: nil } }
-  let(:runner) { ChefSpec::SoloRunner.new(platform) }
-  let(:chef_run) { runner.converge(described_recipe) }
-
-  shared_examples_for 'any supported platform' do
-    it 'includes all the required recipes' do
-      (includes + extra_includes).each do |i|
-        expect(chef_run).to include_recipe(i)
+  let(:version) { nil }
+  %w(
+    version
+    dev
+    clamd_config
+    freshclam_config
+    clamd_enabled
+    freshclam_enabled
+  ).each { |a| let(a) { nil } }
+  let(:platform) { { platform: 'ubuntu', version: '14.04' } }
+  let(:runner) do
+    ChefSpec::ServerRunner.new(platform) do |node|
+      %w(version dev).each do |a|
+        node.normal['clamav'][a] = send(a) unless send(a).nil?
       end
-    end
-  end
-
-  {
-    Ubuntu: {
-      platform: 'ubuntu',
-      version: '12.04',
-      includes: %w(clamav::install_deb)
-    },
-    CentOS: {
-      platform: 'centos',
-      version: '6.4',
-      includes: %w(clamav::install_rpm)
-    }
-  }.each do |k, v|
-    context "a #{k} node" do
-      let(:platform) { { platform: v[:platform], version: v[:version] } }
-      let(:extra_includes) { v[:includes] }
-
-      context 'with recipes tested in isolation' do
-        it_behaves_like 'any supported platform'
-      end
-
-      context 'with recipes tested together' do
-        before(:each) do
-          # Unstub everything intra-cookbook
-          allow_any_instance_of(Chef::RunContext).to receive(:loaded_recipe?)
-            .and_call_original
-          allow_any_instance_of(Chef::RunContext).to receive(:loaded_recipes)
-            .and_call_original
-
-          stub_apt_resources
-
-          allow_any_instance_of(Chef::Recipe).to receive(:include_recipe)
-          allow_any_instance_of(Chef::Recipe).to receive(:include_recipe)
-            .with(/clamav::/).and_call_original
+      %w(config enabled).each do |a|
+        %w(clamd freshclam).each do |s|
+          unless send("#{s}_#{a}").nil?
+            node.normal['clamav'][s][a] = send("#{s}_#{a}")
+          end
         end
-
-        it_behaves_like 'any supported platform'
       end
     end
   end
+  let(:converge) { runner.converge(described_recipe) }
 
-  context 'a node of an unsupported platform' do
-    let(:platform) { { platform: 'Windows', version: '2008R2' } }
-    it 'raises an exception' do
-      allow_any_instance_of(Chef::Formatters::Base)
-        .to receive(:file_load_failed)
-      expect { chef_run }.to raise_error
+  context 'all default attributes' do
+    cached(:chef_run) { converge }
+
+    it 'installs ClamAV' do
+      expect(chef_run).to create_clamav('default')
+    end
+  end
+
+  context 'an overridden version attribute' do
+    let(:version) { '1.2.3' }
+    cached(:chef_run) { converge }
+
+    it 'installs ClamAV with the desired version' do
+      expect(chef_run).to create_clamav('default').with(version: '1.2.3')
+    end
+  end
+
+  context 'an overridden dev attribute' do
+    let(:dev) { true }
+    cached(:chef_run) { converge }
+
+    it 'installs ClamAV with the dev packages' do
+      expect(chef_run).to create_clamav('default').with(dev: true)
+    end
+  end
+
+  context 'an overridden clamd config attribute' do
+    let(:clamd_config) { { 'thing1' => 'test1', 'thing2' => 'test2' } }
+    cached(:chef_run) { converge }
+
+    it 'installs ClamAV with the desired config' do
+      expect(chef_run).to create_clamav('default')
+        .with(clamd_config: clamd_config)
+    end
+  end
+
+  context 'an overridden freshclam config attribute' do
+    let(:freshclam_config) { { 'thing1' => 'test1', 'thing2' => 'test2' } }
+    cached(:chef_run) { converge }
+
+    it 'installs ClamAV with the desired config' do
+      expect(chef_run).to create_clamav('default')
+        .with(freshclam_config: freshclam_config)
+    end
+  end
+
+  context 'an overridden clamd enabled attribute' do
+    let(:clamd_enabled) { true }
+    cached(:chef_run) { converge }
+
+    it 'installs ClamAV with clamd enabled' do
+      expect(chef_run).to create_clamav('default')
+        .with(enable_clamd: true)
+    end
+  end
+
+  context 'an overridden freshclam enabled attribute' do
+    let(:freshclam_enabled) { true }
+    cached(:chef_run) { converge }
+
+    it 'installs ClamAV with freshclam enabled' do
+      expect(chef_run).to create_clamav('default')
+        .with(enable_freshclam: true)
     end
   end
 end

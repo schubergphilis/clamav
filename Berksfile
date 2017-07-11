@@ -1,10 +1,10 @@
-# Encoding: UTF-8
+# encoding: utf-8
+# frozen_string_literal: true
 
-source 'https://api.berkshelf.com'
+source 'https://supermarket.chef.io'
 
 metadata
 
-group :development, :test do
-  cookbook 'clamav_test',
-           path: './test/cookbooks/clamav_test'
+group :unit do
+  cookbook 'resource_test', path: 'spec/support/cookbooks/resource_test'
 end
