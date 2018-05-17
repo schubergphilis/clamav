@@ -20,6 +20,7 @@
 #
 
 require 'chef/resource'
+require_relative 'helpers_defaults'
 
 class Chef
   class Resource
@@ -27,6 +28,8 @@ class Chef
     #
     # @author Jonathan Hartman <j@p4nt5.com>
     class Clamav < Resource
+      include ClamavCookbook::Helpers::Defaults
+
       provides :clamav
 
       default_action :create
@@ -70,13 +73,20 @@ class Chef
           dev new_resource.dev
         end
         clamav_config 'clamd' do
-          config new_resource.clamd_config
+          if new_resource.clamd_config.empty?
+            config clamd_config
+          else
+            config new_resource.clamd_config
+          end
           if new_resource.enable_clamd
             notifies :restart, 'clamav_service[clamd]'
           end
         end
         clamav_config 'freshclam' do
           config new_resource.freshclam_config
+          if node['platform_family'] == 'rhel' && node['platform_version'].to_i >= 7
+            path '/etc'
+          end
           if new_resource.enable_freshclam
             notifies :restart, 'clamav_service[freshclam]'
           end
