@@ -48,6 +48,10 @@ class Chef
       Resource::Service.allowed_actions.each do |a|
         action a  do
           if a == :start && new_resource.service_name == 'clamd'
+            directory clamav_data_dir do
+              owner clamav_user
+              recursive true
+            end
             execute 'Ensure virus definitions exist so clamd can start' do
               command 'freshclam'
               creates ::File.join(clamav_data_dir, 'main.cvd')

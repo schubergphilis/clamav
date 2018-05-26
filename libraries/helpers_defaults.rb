@@ -36,7 +36,11 @@ module ClamavCookbook
         when 'debian'
           'clamav-daemon'
         when 'rhel'
-          'clamd'
+          if node['platform_version'].to_i >= 7
+            'clamd@scan.service'
+          else
+            'clamd'
+          end
         end
       end
 
@@ -60,7 +64,10 @@ module ClamavCookbook
       # @return [Hash] a barebones freshclam config
       #
       def freshclam_config
-        { database_mirror: %w(db.local.clamav.net database.clamav.net) }
+        { 
+          database_mirror: %w(db.local.clamav.net database.clamav.net),
+          database_owner: node['clamav']['user']
+        }
       end
 
       #
@@ -69,7 +76,15 @@ module ClamavCookbook
       # @return [Hash] a barebones clamd config
       #
       def clamd_config
-        { local_socket: '/var/run/clamav/clamd.sock' }
+        if node['platform_family'] == 'rhel' &&
+           node['platform_version'].to_i >= 7
+          { 
+            local_socket: '/var/run/clamd.scan/clamd.sock',
+            user: node['clamav']['user']
+          }
+        else
+          { local_socket: '/var/run/clamav/clamd.sock' }
+        end
       end
 
       #
@@ -96,7 +111,11 @@ module ClamavCookbook
         when 'debian'
           '/etc/clamav'
         when 'rhel'
-          '/etc/clamav'
+          if node['platform_version'].to_i >= 7
+            '/etc/clamd.d'
+          else
+            '/etc/clamav'
+          end
         end
       end
 
@@ -139,7 +158,7 @@ module ClamavCookbook
           %w(clamav clamav-daemon clamav-freshclam)
         when 'rhel'
           if node['platform_version'].to_i >= 7
-            %w(clamav-server clamav clamav-update)
+            %w(clamav-server clamav clamav-update clamav-server-systemd)
           else
             %w(clamav clamav-db clamd)
           end
