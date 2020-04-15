@@ -158,7 +158,7 @@ module ClamavCookbook
           %w(clamav clamav-daemon clamav-freshclam)
         when 'rhel'
           if node['platform_version'].to_i >= 7
-            %w(clamav-server clamav clamav-update clamav-server-systemd)
+            %w(clamav clamav-update clamd)
           else
             %w(clamav clamav-db clamd)
           end
