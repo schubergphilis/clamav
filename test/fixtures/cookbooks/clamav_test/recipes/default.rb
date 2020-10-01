@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 
 # Ensure rsyslog is installed and running, regardless of whether the build
@@ -19,7 +18,7 @@ file '/etc/rsyslog.conf' do
     local7.* /var/log/boot.log
   EOH
   only_if do
-    node['platform_family'] == 'rhel' && \
+    platform_family?('rhel') && \
       node['platform_version'].to_i >= 7 && \
       File.open('/proc/1/cmdline').read.start_with?('/usr/sbin/sshd')
   end
@@ -32,7 +31,7 @@ directory '/etc/cron.d'
 
 # Speed up Travis builds by dropping in some shared .cvd files instead of
 # downloading them from the DB server on each test platform.
-if ::File.exist?(::File.expand_path('../../files/main.cvd', __FILE__))
+if ::File.exist?(::File.expand_path('../files/main.cvd', __dir__))
   directory node['clamav']['database_directory'] do
     recursive true
   end

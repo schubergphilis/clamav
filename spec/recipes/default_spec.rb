@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 
 require_relative '../spec_helper'
@@ -13,7 +12,7 @@ describe 'clamav::default' do
     clamd_enabled
     freshclam_enabled
   ).each { |a| let(a) { nil } }
-  let(:platform) { { platform: 'ubuntu', version: '14.04' } }
+  let(:platform) { { platform: 'ubuntu', version: '16.04' } }
   let(:runner) do
     ChefSpec::ServerRunner.new(platform) do |node|
       %w(version dev).each do |a|

@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 
 require_relative '../spec_helper'
@@ -19,8 +18,8 @@ describe ClamavCookbook::Helpers::Defaults do
   end
 
   describe '#clamd_service_name' do
-    context 'Ubuntu 14.04' do
-      let(:platform) { { platform: 'ubuntu', version: '14.04' } }
+    context 'Ubuntu 16.04' do
+      let(:platform) { { platform: 'ubuntu', version: '16.04' } }
 
       it 'returns the correct service name' do
         expect(test_obj.clamd_service_name).to eq('clamav-daemon')
@@ -37,8 +36,8 @@ describe ClamavCookbook::Helpers::Defaults do
   end
 
   describe '#freshclam_service_name' do
-    context 'Ubuntu 14.04' do
-      let(:platform) { { platform: 'ubuntu', version: '14.04' } }
+    context 'Ubuntu 16.04' do
+      let(:platform) { { platform: 'ubuntu', version: '16.04' } }
 
       it 'returns the correct service name' do
         expect(test_obj.freshclam_service_name).to eq('clamav-freshclam')
@@ -55,8 +54,8 @@ describe ClamavCookbook::Helpers::Defaults do
   end
 
   describe '#freshclam_config' do
-    context 'Ubuntu 14.04' do
-      let(:platform) { { platform: 'ubuntu', version: '14.04' } }
+    context 'Ubuntu 16.04' do
+      let(:platform) { { platform: 'ubuntu', version: '16.04' } }
 
       it 'returns the correct config' do
         expect(test_obj.freshclam_config).to eq(
@@ -77,8 +76,8 @@ describe ClamavCookbook::Helpers::Defaults do
   end
 
   describe '#clamd_config' do
-    context 'Ubuntu 14.04' do
-      let(:platform) { { platform: 'ubuntu', version: '14.04' } }
+    context 'Ubuntu 16.04' do
+      let(:platform) { { platform: 'ubuntu', version: '16.04' } }
 
       it 'returns the correct config' do
         expect(test_obj.clamd_config).to eq(
@@ -99,8 +98,8 @@ describe ClamavCookbook::Helpers::Defaults do
   end
 
   describe '#clamav_data_dir' do
-    context 'Ubuntu 14.04' do
-      let(:platform) { { platform: 'ubuntu', version: '14.04' } }
+    context 'Ubuntu 16.04' do
+      let(:platform) { { platform: 'ubuntu', version: '16.04' } }
 
       it 'returns the correct path' do
         expect(test_obj.clamav_data_dir).to eq('/var/lib/clamav')
@@ -117,8 +116,8 @@ describe ClamavCookbook::Helpers::Defaults do
   end
 
   describe '#clamav_conf_dir' do
-    context 'Ubuntu 14.04' do
-      let(:platform) { { platform: 'ubuntu', version: '14.04' } }
+    context 'Ubuntu 16.04' do
+      let(:platform) { { platform: 'ubuntu', version: '16.04' } }
 
       it 'returns the correct path' do
         expect(test_obj.clamav_conf_dir).to eq('/etc/clamav')
@@ -135,8 +134,8 @@ describe ClamavCookbook::Helpers::Defaults do
   end
 
   describe '#clamav_user' do
-    context 'Ubuntu 14.04' do
-      let(:platform) { { platform: 'ubuntu', version: '14.04' } }
+    context 'Ubuntu 16.04' do
+      let(:platform) { { platform: 'ubuntu', version: '16.04' } }
 
       it 'returns the correct user' do
         expect(test_obj.clamav_user).to eq('clamav')
@@ -153,8 +152,8 @@ describe ClamavCookbook::Helpers::Defaults do
   end
 
   describe '#clamav_group' do
-    context 'Ubuntu 14.04' do
-      let(:platform) { { platform: 'ubuntu', version: '14.04' } }
+    context 'Ubuntu 16.04' do
+      let(:platform) { { platform: 'ubuntu', version: '16.04' } }
 
       it 'returns the correct group' do
         expect(test_obj.clamav_group).to eq('clamav')
@@ -171,8 +170,8 @@ describe ClamavCookbook::Helpers::Defaults do
   end
 
   describe '#base_packages' do
-    context 'Ubuntu 14.04' do
-      let(:platform) { { platform: 'ubuntu', version: '14.04' } }
+    context 'Ubuntu 16.04' do
+      let(:platform) { { platform: 'ubuntu', version: '16.04' } }
 
       it 'returns the correct package list' do
         expect(test_obj.base_packages).to eq(
@@ -193,8 +192,8 @@ describe ClamavCookbook::Helpers::Defaults do
   end
 
   describe '#dev_packages' do
-    context 'Ubuntu 14.04' do
-      let(:platform) { { platform: 'ubuntu', version: '14.04' } }
+    context 'Ubuntu 16.04' do
+      let(:platform) { { platform: 'ubuntu', version: '16.04' } }
 
       it 'returns the correct package list' do
         expect(test_obj.dev_packages).to eq(%w(libclamav-dev))

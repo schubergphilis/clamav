@@ -1,6 +1,6 @@
 require_relative '../../../spec_helper'
 
-describe 'resource_clamav_cron::ubuntu::14_04' do
+describe 'resource_clamav_cron::ubuntu::16_04' do
   %i(
     minute
     hour
@@ -14,7 +14,7 @@ describe 'resource_clamav_cron::ubuntu::14_04' do
   end
   let(:runner) do
     ChefSpec::SoloRunner.new(
-      step_into: 'clamav_cron', platform: 'ubuntu', version: '14.04'
+      step_into: 'clamav_cron', platform: 'ubuntu', version: '16_04'
     ) do |node|
       %i(minute hour day month weekday).each do |a|
         node.set['clamav']['cron'][a] = send(a)
