@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 
 require_relative '../resources'
@@ -24,7 +23,7 @@ shared_context 'resources::clamav' do
       clamd_config: clamd_config,
       freshclam_config: freshclam_config,
       version: version,
-      dev: dev
+      dev: dev,
     }
   end
   let(:name) { 'default' }

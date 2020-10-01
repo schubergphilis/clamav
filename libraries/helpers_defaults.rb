@@ -1,10 +1,9 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
-# Cookbook Name:: clamav
+# Cookbook:: clamav
 # Library:: helpers_defaults
 #
-# Copyright 2012-2016, Jonathan Hartman
+# Copyright:: 2012-2016, Jonathan Hartman
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -64,9 +63,9 @@ module ClamavCookbook
       # @return [Hash] a barebones freshclam config
       #
       def freshclam_config
-        { 
+        {
           database_mirror: %w(db.local.clamav.net database.clamav.net),
-          database_owner: node['clamav']['user']
+          database_owner: node['clamav']['user'],
         }
       end
 
@@ -78,9 +77,9 @@ module ClamavCookbook
       def clamd_config
         if node['platform_family'] == 'rhel' &&
            node['platform_version'].to_i >= 7
-          { 
+          {
             local_socket: '/var/run/clamd.scan/clamd.sock',
-            user: node['clamav']['user']
+            user: node['clamav']['user'],
           }
         else
           { local_socket: '/var/run/clamav/clamd.sock' }

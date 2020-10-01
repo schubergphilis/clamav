@@ -1,10 +1,9 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
-# Cookbook Name:: clamav
+# Cookbook:: clamav
 # Library:: resource_clamav
 #
-# Copyright 2012-2016, Jonathan Hartman
+# Copyright:: 2012-2016, Jonathan Hartman
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -37,12 +36,12 @@ class Chef
       #
       # Should we enable the clamd service?
       #
-      property :enable_clamd, [TrueClass, FalseClass], default: false
+      property :enable_clamd, [true, false], default: false
 
       #
       # Should we enable the freshclam service?
       #
-      property :enable_freshclam, [TrueClass, FalseClass], default: false
+      property :enable_freshclam, [true, false], default: false
 
       #
       # Property for a config hash to pass on to the clamd config.
@@ -57,12 +56,12 @@ class Chef
       #
       # Optionally install a specific version of the ClamAV packages.
       #
-      property :version, [String, nil], default: nil
+      property :version, [String, nil]
 
       #
       # Optionally install the dev in addition to base packages.
       #
-      property :dev, [TrueClass, FalseClass], default: false
+      property :dev, [true, false], default: false
 
       #
       # Install ClamAV, configure it, and enable or disable the services.

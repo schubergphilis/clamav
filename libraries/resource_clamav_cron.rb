@@ -1,10 +1,9 @@
-# encoding: utf-8
 # frozen_string_literal: true
 #
-# Cookbook Name:: clamav
+# Cookbook:: clamav
 # Library:: resource_clamav_cron
 #
-# Copyright 2012-2016, Jonathan Hartman
+# Copyright:: 2012-2016, Jonathan Hartman
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -35,7 +34,7 @@ class Chef
       # Properties for the underlying cron job definition.
       #
       %i(minute hour day month weekday).each do |p|
-        property p, [Fixnum, String], required: true
+        property p, [Integer, String], required: true
       end
 
       #
